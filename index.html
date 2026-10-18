@@ -42,8 +42,11 @@ footer{margin-top:28px;border-top:1.5px dashed var(--line);padding:18px 0;text-a
 body{font-size:18px;line-height:1.75}
 .course-hero{padding:22px;background:linear-gradient(135deg,#ffffff 0%,#f1faf4 100%);border:2px solid var(--line);border-radius:22px;box-shadow:var(--shadow)}
 .course-hero h2{font-size:32px}.course-hero p{margin:6px 0 0;color:var(--muted)}
-.lesson-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:16px}
-.lesson-card{position:relative;text-align:left;border:2px solid var(--line);background:#fff;border-radius:20px;padding:18px;min-height:190px;box-shadow:0 5px 14px rgba(35,59,49,.07);transition:.18s transform,.18s border-color,.18s box-shadow}
+.lesson-band{width:min(1280px,calc(100vw - 32px));margin:18px 0 0 50%;transform:translateX(-50%)}
+.lesson-row-label{display:flex;align-items:center;gap:10px;margin:4px 0 9px;font-family:var(--serif);font-size:19px;font-weight:700;color:var(--green)}
+.lesson-row-label::after{content:"";height:1.5px;background:var(--line);flex:1}
+.lesson-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:14px}
+.lesson-card{position:relative;text-align:left;border:2px solid var(--line);background:#fff;border-radius:20px;padding:17px;min-height:205px;box-shadow:0 5px 14px rgba(35,59,49,.07);transition:.18s transform,.18s border-color,.18s box-shadow}
 .lesson-card:hover{transform:translateY(-2px);border-color:var(--green);box-shadow:0 10px 24px rgba(35,59,49,.12)}
 .lesson-card .lesson-no{font-family:var(--serif);font-size:18px;color:var(--green);font-weight:700}
 .lesson-card .lesson-name{font-family:var(--serif);font-size:27px;font-weight:700;margin-top:2px}
@@ -72,7 +75,9 @@ body{font-size:18px;line-height:1.75}
 .finish-card{text-align:center;padding:26px}.finish-card .medal{font-size:78px;line-height:1}.finish-card h2{font-size:34px}.finish-card p{color:var(--muted)}
 .resource-note{font-size:14px;color:var(--muted);margin-top:14px;padding-top:12px;border-top:1px dashed var(--line)}
 .resetline{margin-top:16px;text-align:right}.resetline button{border:0;background:transparent;color:var(--muted);text-decoration:underline;font-size:13px}
-@media(max-width:680px){.lesson-grid{grid-template-columns:1fr}.stepbar{grid-template-columns:repeat(5,minmax(0,1fr));gap:4px}.stepbtn{font-size:11px;padding:6px 2px;min-height:58px}.stepbtn strong{font-size:14px}.student-box{padding:16px}.course-hero{padding:18px}.big-sentence{padding:16px}.navrow{display:grid;grid-template-columns:1fr 1fr}.navrow>*{width:100%}.navrow .wide{grid-column:1/-1}}
+@media(max-width:1100px){.lesson-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.lesson-band{width:min(920px,calc(100vw - 32px))}}
+@media(max-width:760px){.lesson-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.lesson-card{min-height:185px}}
+@media(max-width:680px){.lesson-grid{grid-template-columns:1fr}.lesson-band{width:100%;margin-left:0;transform:none}.lesson-card{min-height:0}.stepbar{grid-template-columns:repeat(5,minmax(0,1fr));gap:4px}.stepbtn{font-size:11px;padding:6px 2px;min-height:58px}.stepbtn strong{font-size:14px}.student-box{padding:16px}.course-hero{padding:18px}.big-sentence{padding:16px}.navrow{display:grid;grid-template-columns:1fr 1fr}.navrow>*{width:100%}.navrow .wide{grid-column:1/-1}}
 
 </style>
 </head>
@@ -312,12 +317,24 @@ function allLessonTypes(l){return ORDER.filter(t=>EXAMPLES.some(e=>e.l===l&&e.t=
 function maxStepDone(l){const p=loadV2Progress();return Math.max(0,Math.min(5,+p[l]||0))}
 function markStepDone(l,n){const p=loadV2Progress();p[l]=Math.max(+p[l]||0,n);saveV2Progress(p)}
 function stepBar(l,step){const done=maxStepDone(l);return `<div class="stepbar">${V2_STEPS.map((s,i)=>`<button class="stepbtn ${i===step?'on':''} ${i<done?'done':''}" data-v2step="${i}"><strong>${i+1}</strong>${s}</button>`).join('')}</div>`}
+function lessonCardHtml(l){
+ const done=maxStepDone(l),pct=done*20,types=allLessonTypes(l);
+ return `<button class="lesson-card" data-lesson="${l}"><div class="lesson-no">第${LESSON_NUM[l-1]}課</div><div class="lesson-name">${LESSONS[l]}</div><div class="lesson-types">${types.map(t=>`<span class="ltag">${t}</span>`).join('')}</div><div class="status">${done===5?'✅ 已完成本課':'學習進度 '+done+' / 5'}</div><div class="meter"><span style="width:${pct}%"></span></div></button>`;
+}
 function renderCourseHome(){
  v2={lesson:0,step:0,ex:0,clue:0,quiz:0,quizCorrect:0,challenge:null};
  const stage=document.getElementById('learnStage');
- stage.innerHTML=`<div class="course-hero"><h2>🕵️ 翰林三上・修辭偵探學院</h2><p>選一課開始。每課固定走 5 個步驟：先學修辭，再看例句、找線索、選答案，最後完成闖關。</p></div><div class="lesson-grid">${ALL_LESSONS.map(l=>{
-   const done=maxStepDone(l),pct=done*20,types=allLessonTypes(l);
-   return `<button class="lesson-card" data-lesson="${l}"><div class="lesson-no">第${LESSON_NUM[l-1]}課</div><div class="lesson-name">${LESSONS[l]}</div><div class="lesson-types">${types.map(t=>`<span class="ltag">${t}</span>`).join('')}</div><div class="status">${done===5?'✅ 已完成本課':'學習進度 '+done+' / 5'}</div><div class="meter"><span style="width:${pct}%"></span></div></button>`}).join('')}</div><div class="resetline"><button id="resetV2">清除我的學習進度</button></div>`;
+ const firstHalf=[1,2,3,4,5,6],secondHalf=[7,8,9,10,11,12];
+ stage.innerHTML=`<div class="course-hero"><h2>🕵️ 翰林三上・修辭偵探學院</h2><p>選一課開始。每課固定走 5 個步驟：先學修辭，再看例句、找線索、選答案，最後完成闖關。</p></div>
+ <div class="lesson-band">
+   <div class="lesson-row-label">📘 第1～6課</div>
+   <div class="lesson-grid">${firstHalf.map(lessonCardHtml).join('')}</div>
+ </div>
+ <div class="lesson-band">
+   <div class="lesson-row-label">📗 第7～12課</div>
+   <div class="lesson-grid">${secondHalf.map(lessonCardHtml).join('')}</div>
+ </div>
+ <div class="resetline"><button id="resetV2">清除我的學習進度</button></div>`;
  stage.querySelectorAll('.lesson-card').forEach(b=>b.onclick=()=>openV2Lesson(+b.dataset.lesson,0));
  document.getElementById('resetV2').onclick=()=>{if(confirm('要清除十二課的學習進度嗎？')){try{localStorage.removeItem(V2_KEY)}catch(e){}renderCourseHome()}};
 }
