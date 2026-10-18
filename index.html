@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>修辭小偵探｜翰林三上互動學習版</title>
-<meta name="description" content="翰林版國語三年級上學期第一課到第六課修辭學習、總整理與闖關遊戲。">
+<meta name="description" content="翰林版國語三年級上學期第一課到第十二課修辭學習、總整理與闖關遊戲。">
 <style>
 :root{
   --paper:#f7fbf5;--grid:#dbe9dd;--card:#fff;--ink:#20302f;--muted:#60716e;
@@ -90,11 +90,13 @@ body{font-size:18px;line-height:1.75}
 <section id="learn" class="panel active"><div id="learnStage"></div></section>
 <section id="review" class="panel"><div id="reviewStage"></div></section>
 <section id="game" class="panel"><div class="toolbar"><button class="sound" id="soundBtn">音效：開</button></div><div id="gameStage"></div></section>
-<footer>內容依據使用者提供的翰林版三上第1～6課「修辭輕鬆學」資料整理；供教學複習使用，非出版社官方產品。</footer>
+<footer>內容依據使用者提供的翰林版三上第1～12課「修辭輕鬆學」資料整理；供教學複習使用，非出版社官方產品。</footer>
 </div>
 <script>
-const LESSONS={1:"時間是什麼",2:"妙用便利貼",3:"提早五分鐘",4:"水滾了",5:"為梨花撐傘",6:"小鉛筆大學問"};
-const ORDER=["譬喻","轉化","類疊","映襯","設問","排比","摹寫","感嘆","層遞","頂真"];
+const LESSONS={1:"時間是什麼",2:"妙用便利貼",3:"提早五分鐘",4:"水滾了",5:"為梨花撐傘",6:"小鉛筆大學問",7:"風的味道",8:"寄居蟹找新家",9:"阿塱壹古道",10:"秋千上的婚禮",11:"一路平安",12:"不一樣的團圓"};
+const ALL_LESSONS=Object.keys(LESSONS).map(Number);
+const LESSON_NUM=["一","二","三","四","五","六","七","八","九","十","十一","十二"];
+const ORDER=["譬喻","轉化","類疊","映襯","設問","排比","摹寫","感嘆","層遞","頂真","鑲嵌"];
 const INFO={
 "譬喻":{seal:"喻",def:"找出與所要描寫的對象有類似特點的人、事或物來做比方，加以說明，使文章內容表達得更具體、更生動。可分為明喻、隱喻、略喻、借喻四種。",tip:"看到『像、是、如同』等比方線索時，想一想：是不是把一樣東西拿另一樣有相似特點的東西來比？"},
 "轉化":{seal:"轉",def:"描述一件事物時，轉變它原來的性質，使它成為另一種本質不同的事物，再加以形容。可分為擬人化、擬物化、形象化三種。",tip:"不是人，卻像人一樣『走、唱歌、說話』，常是轉化中的擬人化。"},
@@ -105,7 +107,8 @@ const INFO={
 "摹寫":{seal:"摹",def:"描寫人物或現象時，加入聲音、顏色、形體、情狀等感受來具體描繪。包括視覺、聽覺、嗅覺、味覺、觸覺等感受。",tip:"問自己：這句話讓我『看見、聽見、聞到、嚐到、摸到』什麼？"},
 "感嘆":{seal:"嘆",def:"遇到喜、怒、哀、樂時，以呼聲表露情感的修辭法。",tip:"注意『啊、吧』等語氣詞和驚嘆號，判斷句子是不是在直接表露情緒。"},
 "層遞":{seal:"遞",def:"要說的有兩個以上事物，而且有大小、輕重等比例或先後秩序，依序層層遞進或遞減。",tip:"看內容有沒有按照『先→再→更』或程度由小到大、有次序地往前推。"},
-"頂真":{seal:"頂",def:"用上一句的結尾，作為下一句的起頭，使相鄰句子頭尾蟬聯，有上遞下接的趣味。",tip:"把上一句尾巴和下一句開頭圈起來，看是不是同一個詞。"}
+"頂真":{seal:"頂",def:"用上一句的結尾，作為下一句的起頭，使相鄰句子頭尾蟬聯，有上遞下接的趣味。",tip:"把上一句尾巴和下一句開頭圈起來，看是不是同一個詞。"},
+"鑲嵌":{seal:"鑲",def:"在語詞中，故意插入數目字、虛字、特定字、同義或異義字來拉長文句，就是鑲嵌修辭。",tip:"看看原本簡短的語詞中，是不是故意插入字詞，讓句子更有變化、更有趣味。"}
 };
 const EXAMPLES=[
 {t:"譬喻",l:1,s:"時間是蝸牛",k:["時間是蝸牛"],n:"用蝸牛行動緩慢的特點來打比方，形容時間過得很慢。"},
@@ -147,6 +150,55 @@ const EXAMPLES=[
 {t:"設問",l:6,s:"沒想到鉛筆有這麼多學問吧？",k:["吧？"],n:"作者已知道答案，屬於明知故問的激問。"},
 {t:"頂真",l:6,s:"鉛筆最重要的部分是筆芯，筆芯的原料有石墨和黏土。",k:["筆芯，筆芯"],n:"用前一句結尾『筆芯』作下一句起頭。"},
 {t:"類疊",l:6,s:"點點滴滴",k:["點點滴滴"],n:"把『點滴』這個語詞反覆使用。"}
+
+{t:"轉化",l:7,s:"風到處流浪",k:["流浪"],n:"風吹動的樣子被想像成「流浪」，使用的是轉化法裡的擬人法。"},
+{t:"轉化",l:7,s:"風的身上\n有淡淡的鹹味\n我知道\n他剛從蔚藍的大海回航",k:["身上","回航"],n:"風被想像成人，有身體，能航海，使用的是轉化法裡的擬人法。"},
+{t:"轉化",l:7,s:"風的身上\n有冰涼的雪花\n我知道\n他乘著雪橇由山坡滑下",k:["身上","乘著雪橇"],n:"風被想像成人，有身體，能滑雪，使用的是轉化法裡的擬人法。"},
+{t:"轉化",l:7,s:"風的身上\n有清新的草香\n我知道\n他剛剛在原野上快樂的打滾",k:["身上","打滾"],n:"風被想像成人，有身體、有感受，能打滾，使用的是轉化法裡的擬人法。"},
+{t:"映襯",l:7,s:"沒有人知道他去過什麼地方\n只有\n我知道",k:["沒有人知道","只有","我知道"],n:"把「沒有」和「只有」兩種不同的觀念或事實放在一起比較。"},
+{t:"摹寫",l:7,s:"有冰涼的雪花",k:["冰涼"],n:"運用觸覺摹寫，寫出雪花給人冰涼的感受。"},
+{t:"摹寫",l:7,s:"有清新的草香",k:["清新的草香"],n:"運用嗅覺摹寫，寫出青草的氣味。"},
+{t:"類疊",l:7,s:"有淡淡的鹹味",k:["淡淡的"],n:"以疊字「淡淡的」加強說明，形容鹹味不明顯。"},
+
+{t:"設問",l:8,s:"是什麼東西卡住我了？",k:["？"],n:"屬於設問法裡的疑問，表示心中真有疑惑。"},
+{t:"設問",l:8,s:"小螃蟹，你怎麼變成這樣？",k:["怎麼","？"],n:"屬於設問法裡的疑問。"},
+{t:"設問",l:8,s:"可以幫我把身上的東西拿下來嗎？",k:["嗎？"],n:"屬於設問法裡的疑問。"},
+{t:"設問",l:8,s:"你的殼呢？",k:["呢？"],n:"屬於設問法裡的疑問。"},
+{t:"設問",l:8,s:"不知道這樣美好的風景，我還能欣賞多久？",k:["多久？"],n:"屬於設問法裡的疑問。"},
+{t:"設問",l:8,s:"真的嗎？在哪裡？",k:["嗎？","哪裡？"],n:"屬於設問法裡的疑問。"},
+{t:"設問",l:8,s:"你怎麼了？發生了什麼事？",k:["怎麼了？","什麼事？"],n:"屬於設問法裡的疑問。"},
+{t:"頂真",l:8,s:"小螃蟹正要去找寄居蟹，寄居蟹就慌張的跑過來了。",k:["寄居蟹，寄居蟹"],n:"用前一句的結尾「寄居蟹」來作為下一句的起頭。"},
+{t:"類疊",l:8,s:"拜託！拜託！",k:["拜託！拜託！"],n:"重複運用相同的字詞語句，更能強調文意。"},
+{t:"鑲嵌",l:8,s:"東翻西找",k:["東","西"],n:"在「翻找」中插入「東、西」兩字，可強化翻找的忙碌程度，讓句子更有變化。"},
+{t:"感嘆",l:8,s:"啊！瓶蓋會動！",k:["啊！"],n:"用感嘆句表達人物的情緒，讓讀者感受更直接、深刻。"},
+
+{t:"設問",l:9,s:"那會是什麼呢？",k:["什麼呢？"],n:"屬於設問法裡的疑問，表示心中真有疑惑。"},
+{t:"設問",l:9,s:"你，也想來挑戰阿塱壹古道嗎？",k:["嗎？"],n:"屬於設問法裡的疑問。"},
+{t:"摹寫",l:9,s:"海水的顏色由天邊深深的藍，慢慢變成岸邊淺淺的藍。風呼呼的吹來，捲起了朵朵白色的浪花。",k:["深深的藍","淺淺的藍","呼呼","朵朵白色的浪花"],n:"加入顏色、聲音、形體、情狀等感受，使用視覺和聽覺摹寫。"},
+{t:"轉化",l:9,s:"浪花一曲曲輕唱，我們一聲聲歡笑。",k:["浪花","輕唱"],n:"把浪花想像成會唱歌的人，是轉化法裡的擬人化。"},
+{t:"類疊",l:9,s:"海水的顏色由天邊深深的藍，慢慢變成岸邊淺淺的藍。",k:["深深","淺淺"],n:"透過疊字來強調顏色的變化。"},
+{t:"類疊",l:9,s:"風呼呼的吹來，捲起了朵朵白色的浪花。",k:["朵朵"],n:"使用疊字「朵朵」表示浪花的數量很多。"},
+{t:"類疊",l:9,s:"浪花一曲曲輕唱，我們一聲聲歡笑。",k:["一曲曲","一聲聲"],n:"使用疊字「一曲曲」和「一聲聲」，表現接連不斷的聲音與歡笑。"},
+
+{t:"感嘆",l:10,s:"盪得好高哇！",k:["哇！"],n:"句中的「哇」是感嘆詞，表示驚喜之感。"},
+{t:"摹寫",l:10,s:"新娘身上的飾品和百合花頭飾，ㄉ一ㄥ ㄉ一ㄥ ㄉㄤ ㄉㄤ的。",k:["ㄉ一ㄥ ㄉ一ㄥ ㄉㄤ ㄉㄤ"],n:"用聲音描寫飾品發出的聲音，屬於聽覺摹寫。"},
+{t:"譬喻",l:10,s:"臉上的笑容就像花朵一樣美麗。",k:["像花朵一樣"],n:"把美麗的花朵拿來打比方，形容臉上的笑容。"},
+{t:"頂真",l:10,s:"秋千盪得越高，代表新娘越勇敢。勇敢的新娘聽到大家的祝福，臉上的笑容就像花朵一樣美麗。",k:["勇敢。勇敢"],n:"用前一句的結尾「勇敢」作為下一句的起頭。"},
+{t:"轉化",l:10,s:"活動一直進行到深夜，歡樂的婚禮，才畫上美麗的句點。",k:["畫上美麗的句點"],n:"把「結束」這件事形容成「畫上句點」，屬於轉化法裡的形象化。"},
+
+{t:"摹寫",l:11,s:"「ㄎㄡ ㄌㄨㄛ ㄎㄡ ㄌㄨㄛ！ㄎㄡ ㄌㄨㄛ ㄎㄡ ㄌㄨㄛ！」車子傳出一陣陣奇怪的聲音。",k:["ㄎㄡ ㄌㄨㄛ"],n:"用聲音形容車子故障時所發出的聲音，屬於聽覺摹寫。"},
+{t:"摹寫",l:11,s:"修車廠的大門口已經貼好了春聯，裡頭的圓桌上擺滿了年菜。",k:["春聯","擺滿了年菜"],n:"運用視覺摹寫描繪過年的景象，讓讀者感受年節氣氛。"},
+{t:"類疊",l:11,s:"有人放煙火，有人放鞭炮。",k:["有人放","有人放"],n:"將「有人放……」這一個詞語接二連三反覆使用。"},
+{t:"類疊",l:11,s:"幸好，爸爸的車子只有一個小零件壞了；幸好，修車師傅一下子就把車子修好了。",k:["幸好","幸好"],n:"將「幸好，……」這一個詞語接二連三反覆使用。"},
+{t:"映襯",l:11,s:"大家應該都在準備過年了，我們卻還在路上……。",k:["準備過年","卻還在路上"],n:"用「卻」把「準備過年」和「還在路上」兩種不同的觀念或事實放在一起比較。"},
+{t:"映襯",l:11,s:"幸好，爸爸的車子只有一個小零件壞了；幸好，修車師傅一下子就把車子修好了。",k:["車子","壞了","修好了"],n:"把「車子壞了」和「把車子修好了」兩種不同的觀念或事實放在一起比較。"},
+{t:"設問",l:11,s:"附近的店家都已經休息了，這時間大家應該都在吃年夜飯了吧？",k:["吧？"],n:"屬於設問法裡的激問，是作者故意用疑問方式引起注意。"},
+{t:"設問",l:11,s:"能請你幫個忙嗎？",k:["嗎？"],n:"屬於設問法裡的疑問，表示心中真有疑惑。"},
+
+{t:"映襯",l:12,s:"啊！小小的客廳裡，擠了滿滿的親人。",k:["小小的","滿滿的"],n:"把「小小的」和「滿滿的」兩種不同的觀念或事實放在一起比較。"},
+{t:"摹寫",l:12,s:"長長的雨絲落在車窗上。",k:["長長的雨絲"],n:"運用視覺摹寫來描寫景物，襯托主角孤單的情緒。"},
+{t:"摹寫",l:12,s:"遠方的煙火點亮了夜空。",k:["煙火","點亮了夜空"],n:"運用視覺摹寫來描寫景物，讓抽象感覺有清楚的畫面。"},
+{t:"類疊",l:12,s:"小小的娃娃，滿臉紅通通，睡得好香好香。",k:["小小","紅通通","好香好香"],n:"重複運用相同的字詞語句，更能強調文意。"},
 ];
 const PRACTICE=[
 {l:1,t:"譬喻",q:"下列何者為譬喻修辭？",opts:["麻糬是一種糯米製成的食品，吃起來又軟又有嚼勁，我很喜歡。","麻糬是白玉丸子一樣的米製品，吃起來軟軟甜甜，十分美味。"],a:1,ex:"第2句把麻糬比成白玉丸子；第1句主要是味覺摹寫兼類疊。"},
@@ -173,6 +225,37 @@ const PRACTICE=[
 {l:6,t:"設問",q:"下列何者為設問修辭？",opts:["公雞啼，小鳥叫，太陽出來了，太陽當空照，對我微微笑。","三輪車，跑得快；上面坐個老太太，要五毛，給一塊，你說奇怪不奇怪？"],a:1,ex:"第2句以問句引起注意；第1句附件解析為轉化。"},
 {l:6,t:"頂真",q:"下列何者為頂真修辭？",opts:["黑又大，圓又亮，媽媽滷的鐵蛋，又香又好吃。","搖哇搖，搖哇搖，搖到外婆橋，外婆叫我好寶寶。"],a:1,ex:"前面『外婆橋』接到後面的『外婆』，附件列為頂真；第1句為類疊。"},
 {l:6,t:"類疊",q:"下列何者為類疊修辭？",opts:["背包裡裝了滿滿的回憶，足夠讓我細細品味許多年。","口袋愈是小，胃口就愈大。可憐我的錢只夠買一個小麵包。"],a:0,ex:"『滿滿、細細』反覆用字；第2句附件解析為映襯。"}
+
+{l:7,t:"轉化",q:"下列何者為轉化修辭？",opts:["小蜜蜂嗡嗡嗡，飛到西，飛到東，一天到晚嗡嗡嗡。","螢火蟲提著燈籠到處飛，媽媽羨慕牠不用付電費。"],a:1,ex:"第2句把螢火蟲寫得像人會提燈籠；第1句主要是聽覺摹寫兼類疊。"},
+{l:7,t:"映襯",q:"下列何者為映襯修辭？",opts:["他是一個課堂上活潑有趣，私底下沉默內向的人。","她是一個跳起舞來有如裝上電池，活力十足的人。"],a:0,ex:"第1句把「活潑有趣」和「沉默內向」放在一起比較；第2句附件解析為譬喻。"},
+{l:7,t:"摹寫",q:"下列何者為摹寫修辭？",opts:["這座城市建造在山丘上，就像一位巨人眺望著遠方。","清泉自山谷潺潺流出，流進我的趾縫，沁涼之感頓時令人暑氣全消。"],a:1,ex:"第2句有聽覺與觸覺摹寫；第1句附件解析為譬喻。"},
+{l:7,t:"類疊",q:"下列何者為類疊修辭？",opts:["是你，還有我，是我們共同努力，才能使這個班級團結起來。","有天、有地、有人、有萬物，世界因為這些豐富資源，所以多彩多姿。"],a:1,ex:"第2句反覆使用「有……」的語詞結構。"},
+
+{l:8,t:"設問",q:"下列何者為設問修辭？",opts:["玫瑰玫瑰最嬌美，玫瑰玫瑰最豔麗，玫瑰玫瑰我愛你。","荷花荷花幾月開？一月開。一月不開幾月開？二月開。"],a:1,ex:"第2句以問句引起注意，並兼有類疊；第1句主要是類疊。"},
+{l:8,t:"頂真",q:"下列何者為頂真修辭？",opts:["善有善報，惡有惡報。","菠菜含有維生素Ｋ，含有維生素Ｋ的還有雞肉和豬排。"],a:1,ex:"第2句用前一句結尾「含有維生素Ｋ」作為下一句的起頭；第1句附件解析為類疊。"},
+{l:8,t:"類疊",q:"下列何者為類疊修辭？",opts:["書信就是人生一段，日後思想起，往事清晰分明。","書信可以傳情，可以達意，可以抒懷，可以解悶。"],a:1,ex:"第2句反覆使用「可以……」的語句結構。"},
+{l:8,t:"鑲嵌",q:"下列何者為鑲嵌修辭？",opts:["她行事向來果斷，從不拖拖拉拉。","他經過千山萬水，終於回到日夜思念的故鄉。"],a:1,ex:"附件將第2句列為鑲嵌；第1句解析為類疊。"},
+{l:8,t:"感嘆",q:"下列何者為感嘆修辭？",opts:["哎唷！是哪個缺德的人把磚塊堆在馬路上？","老天爺啊！希望警察趕快逮捕酒駕的肇事者。"],a:0,ex:"附件將第1句列為感嘆；第2句解析為呼告。"},
+
+{l:9,t:"設問",q:"下列何者為設問修辭？",opts:["別再問我，我真的什麼都不記得了！","一覺醒來怎麼就把昨夜的夢境都忘了？"],a:1,ex:"第2句用問句引起注意；第1句附件解析為頂真。"},
+{l:9,t:"摹寫",q:"下列何者為摹寫修辭？",opts:["看茶葉在杯子裡喝飽了水大展身手的樣子，真有趣。","一隻青蛙一張嘴，兩個眼睛四條腿，噗通一聲跳下水。"],a:1,ex:"第2句加入外形與聲音描寫；第1句附件解析為轉化。"},
+{l:9,t:"轉化",q:"下列何者為轉化修辭？",opts:["陽臺上有一隻黑冠麻鷺朝著我笑，牠還擺動翅膀，想跟我握手。","陽臺裡飛來一隻黑冠麻鷺，一看見我就別過頭去，一動也不動。"],a:0,ex:"第1句把黑冠麻鷺寫得像人會笑、會握手。"},
+{l:9,t:"類疊",q:"下列何者為類疊修辭？",opts:["她激動的流下高興的眼淚。","多子多孫多福氣，積福積德積愛心。"],a:1,ex:"第2句反覆使用「多」與「積」；第1句附件解析為映襯。"},
+
+{l:10,t:"感嘆",q:"下列何者為感嘆修辭？",opts:["哇！雨過天青，彩虹高掛，這真是太美了。","你不要哇哇大叫，天邊出現彩虹，是自然現象。"],a:0,ex:"第1句用「哇！」直接表達情感；第2句附件解析為聽覺摹寫。"},
+{l:10,t:"摹寫",q:"下列何者為摹寫修辭？",opts:["小猴子，吱吱叫，肚子餓得不能跳。","給香蕉，還不要，你說好笑不好笑？"],a:0,ex:"第1句以「吱吱叫」描寫聲音；第2句附件解析為設問。"},
+{l:10,t:"譬喻",q:"下列何者為譬喻修辭？",opts:["抱怨就像一把雙面的刀，我抱怨你，你抱怨我，最後我們將不歡而散。","導致我們最後不歡而散的原因很簡單，就是你愛抱怨，我也不願認輸。"],a:0,ex:"第1句以「像一把雙面的刀」來比喻抱怨。"},
+{l:10,t:"頂真",q:"下列何者為頂真修辭？",opts:["我幫助你，我也幫助他。有能力給予，這真是一件美好的事。","我幫助你，你幫助他。抱著這樣的信念，世界將變得很美好。"],a:1,ex:"第2句前面的「你」接到下一分句開頭的「你」，形成頭尾相接。"},
+{l:10,t:"轉化",q:"下列何者為轉化修辭？",opts:["除了懷抱著理想，我們還需一步一腳印持續努力，才能有成功的一天。","比起他想一步登天的念頭，你一步一腳印認真努力，更值得我們學習。"],a:0,ex:"依附件答案，第1句為轉化修辭；第2句解析為映襯。"},
+
+{l:11,t:"摹寫",q:"下列何者為摹寫修辭？",opts:["她不愧是飛躍的羚羊，一百公尺竟然只跑了十二秒。","蝴蝶，蝴蝶，生得真美。頭戴冠絲，身穿花花衣。"],a:1,ex:"第2句描寫蝴蝶的外形；第1句附件解析為譬喻。"},
+{l:11,t:"類疊",q:"下列何者為類疊修辭？",opts:["有運動家風度的人，寧可有光明的失敗，絕不要不榮譽的成功。","小小螢火蟲，飛到西，飛到東，這邊亮，那邊亮，好像許多小燈籠。"],a:1,ex:"第2句有相同字詞與句式反覆，並兼有譬喻；第1句解析為映襯。"},
+{l:11,t:"映襯",q:"下列何者為映襯修辭？",opts:["小姐小姐別生氣，明天帶你去看戲，我坐椅子你坐地，我吃香蕉你吃皮。","小姐小姐別生氣，明天帶你去看戲。看什麼戲？看妳爸爸流鼻涕！"],a:0,ex:"第1句把「我坐椅子／你坐地」、「我吃香蕉／你吃皮」放在一起比較；第2句解析為設問。"},
+{l:11,t:"設問",q:"下列何者為設問修辭？",opts:["小貓叫，小狗跳，你家寶寶愛笑笑。","大象，大象，你的鼻子怎麼那麼長？"],a:1,ex:"第2句用問句引起注意；第1句附件解析為類疊。"},
+
+{l:12,t:"映襯",q:"下列何者為映襯修辭？",opts:["白浪滔滔我不怕！掌穩舵兒往前划！撒網下水到漁家啊！捕條大魚笑哈哈！","雖然沒有好花園，春蘭秋桂長飄香；雖然沒有大廳堂，冬天溫暖夏天涼。"],a:1,ex:"第2句把不同情況放在一起比較，並兼有類疊；第1句解析為視覺摹寫。"},
+{l:12,t:"摹寫",q:"下列何者為摹寫修辭？",opts:["油桐花一旦盛開，就預告了梅雨季緊接著就要光臨大地。","又到了油桐花盛開的季節，旋轉緩降的小白花，一朵一朵又一朵，真是美麗。"],a:1,ex:"第2句描寫油桐花旋轉緩降的視覺畫面；第1句解析為轉化。"},
+{l:12,t:"類疊",q:"下列何者為類疊修辭？",opts:["努力的過程難免一波三折，不要退縮，勇往前進，終有成功之日。","因為有曲曲折折的努力過程，才有現在順順利利的成功結果。"],a:1,ex:"第2句以「曲曲折折、順順利利」反覆用字；第1句附件解析為鑲嵌。"},
 ];
 const CONFUSE=[
 ["轉化 vs 譬喻","轉化是把事物的性質『變成另一種樣子』，例如把鳥兒寫成會高歌；譬喻則是把兩個有相似點的事物拿來比。"],
@@ -182,7 +265,7 @@ const CONFUSE=[
 ];
 function esc(s){return String(s).replace(/[&<>\"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]))}
 function markText(s,keys=[]){let x=esc(s);for(const k of keys){const e=esc(k).replace(/[.*+?^${}()|[\]\\]/g,"\\$&");x=x.replace(new RegExp(e,"g"),m=>`<mark class="hl">${m}</mark>`)}return x.replace(/\n/g,"<br>")}
-const lessonName=l=>`第${"一二三四五六"[l-1]}課〈${LESSONS[l]}〉`;
+const lessonName=l=>`第${LESSON_NUM[l-1]}課〈${LESSONS[l]}〉`;
 function lessonTypes(l){return ORDER.filter(t=>EXAMPLES.some(e=>e.t===t&&e.l===l))}
 function exList(arr){return `<ul class="examples">${arr.map(e=>`<li><div class="ex-src">${lessonName(e.l)}</div><div class="ex-s">${markText(e.s,e.k)}</div>${e.n?`<div class="ex-n">${esc(e.n)}</div>`:""}</li>`).join("")}</ul>`}
 
@@ -191,22 +274,22 @@ for(const b of document.querySelectorAll('.tab')) b.onclick=()=>{document.queryS
 
 // learn
 let currentType=null;
-function renderLearnHome(){document.getElementById('learnStage').innerHTML=`<div class="box"><h2>選一種修辭開始學</h2><p class="lead">共整理出 10 種修辭。每一種都會看到附件中的定義、課文解析句與練習。</p><div class="units">${ORDER.map(t=>`<button class="unit" data-t="${t}"><span class="seal">${INFO[t].seal}</span><span class="name">${t}</span><span class="mini">${[...new Set(EXAMPLES.filter(e=>e.t===t).map(e=>e.l))].map(l=>`第${'一二三四五六'[l-1]}課`).join('・')}</span></button>`).join('')}</div></div>`;document.querySelectorAll('.unit').forEach(b=>b.onclick=()=>openUnit(b.dataset.t))}
+function renderLearnHome(){document.getElementById('learnStage').innerHTML=`<div class="box"><h2>選一種修辭開始學</h2><p class="lead">共整理出 11 種修辭。每一種都會看到附件中的定義、課文解析句與練習。</p><div class="units">${ORDER.map(t=>`<button class="unit" data-t="${t}"><span class="seal">${INFO[t].seal}</span><span class="name">${t}</span><span class="mini">${[...new Set(EXAMPLES.filter(e=>e.t===t).map(e=>e.l))].map(l=>`第${LESSON_NUM[l-1]}課`).join('・')}</span></button>`).join('')}</div></div>`;document.querySelectorAll('.unit').forEach(b=>b.onclick=()=>openUnit(b.dataset.t))}
 function openUnit(t){currentType=t;const info=INFO[t], exs=EXAMPLES.filter(e=>e.t===t), lessons=[...new Set(exs.map(e=>e.l))], ps=PRACTICE.filter(p=>p.t===t);document.getElementById('learnStage').innerHTML=`<div class="box"><div class="unit-head"><div class="unit-title"><span class="seal">${info.seal}</span><div><h2>${t}</h2><div class="lesson-tags">${lessons.map(l=>`<span class="ltag">${lessonName(l)}</span>`).join('')}</div></div></div><button class="back" id="backLearn">← 回修辭教室</button></div><p class="def">${esc(info.def)}</p><p class="tip"><b>判斷小撇步：</b>${esc(info.tip)}</p><h3 style="margin-top:18px">課文解析句</h3>${exList(exs)}${ps.length?`<h3 style="margin-top:18px">附件練習</h3>${ps.map((p,i)=>practiceBlock(p,i)).join('')}`:''}</div>`;document.getElementById('backLearn').onclick=renderLearnHome;bindPractice()}
 function practiceBlock(p,i){return `<div class="practice" data-pid="${PRACTICE.indexOf(p)}"><p class="q">${esc(p.q)}</p><div class="opts">${p.opts.map((o,k)=>`<button class="popt" data-k="${k}">${k+1}. ${esc(o)}</button>`).join('')}</div><p class="pfb"></p></div>`}
 function bindPractice(){document.querySelectorAll('.practice').forEach(box=>{const p=PRACTICE[+box.dataset.pid];box.querySelectorAll('.popt').forEach(btn=>btn.onclick=()=>{const k=+btn.dataset.k;box.querySelectorAll('.popt').forEach((b,i)=>{b.disabled=true;b.classList.toggle('right',i===p.a);b.classList.toggle('wrong',i===k&&i!==p.a)});const fb=box.querySelector('.pfb');fb.className='pfb '+(k===p.a?'good':'bad');fb.textContent=(k===p.a?'答對了！ ':'再看一次。 ')+p.ex})})}
 
 // review
 let reviewLesson=0;
-function renderReview(){const stage=document.getElementById('reviewStage');stage.innerHTML=`<div class="box"><h2>哪一課有哪些修辭？</h2><p class="lead">按課別篩選，紅圈表示該課附件有整理這種修辭。</p><div class="chips" id="rchips">${[0,1,2,3,4,5,6].map(l=>`<button class="chip ${reviewLesson===l?'on':''}" data-l="${l}">${l?`第${'一二三四五六'[l-1]}課`:'全部'}</button>`).join('')}</div><div class="matrix-wrap"><table class="matrix"><thead><tr><th>修辭</th>${[1,2,3,4,5,6].map(l=>`<th>第${'一二三四五六'[l-1]}課<br><small>${LESSONS[l]}</small></th>`).join('')}</tr></thead><tbody>${ORDER.map(t=>`<tr class="${reviewLesson&& !EXAMPLES.some(e=>e.t===t&&e.l===reviewLesson)?'dim':''}"><th>${t}</th>${[1,2,3,4,5,6].map(l=>`<td>${EXAMPLES.some(e=>e.t===t&&e.l===l)?'<span class="dot"></span>':''}</td>`).join('')}</tr>`).join('')}</tbody></table></div></div><div class="cards">${ORDER.map(t=>reviewCard(t)).join('')}</div><div class="box"><h2>容易搞混的修辭</h2><div class="confuse">${CONFUSE.map(c=>`<div><b>${c[0]}</b><p>${c[1]}</p></div>`).join('')}</div></div>`;stage.querySelectorAll('#rchips .chip').forEach(b=>b.onclick=()=>{reviewLesson=+b.dataset.l;renderReview()})}
+function renderReview(){const stage=document.getElementById('reviewStage');stage.innerHTML=`<div class="box"><h2>哪一課有哪些修辭？</h2><p class="lead">按課別篩選，紅圈表示該課附件有整理這種修辭。</p><div class="chips" id="rchips">${[0,...ALL_LESSONS].map(l=>`<button class="chip ${reviewLesson===l?'on':''}" data-l="${l}">${l?`第${LESSON_NUM[l-1]}課`:'全部'}</button>`).join('')}</div><div class="matrix-wrap"><table class="matrix"><thead><tr><th>修辭</th>${ALL_LESSONS.map(l=>`<th>第${LESSON_NUM[l-1]}課<br><small>${LESSONS[l]}</small></th>`).join('')}</tr></thead><tbody>${ORDER.map(t=>`<tr class="${reviewLesson&& !EXAMPLES.some(e=>e.t===t&&e.l===reviewLesson)?'dim':''}"><th>${t}</th>${ALL_LESSONS.map(l=>`<td>${EXAMPLES.some(e=>e.t===t&&e.l===l)?'<span class="dot"></span>':''}</td>`).join('')}</tr>`).join('')}</tbody></table></div></div><div class="cards">${ORDER.map(t=>reviewCard(t)).join('')}</div><div class="box"><h2>容易搞混的修辭</h2><div class="confuse">${CONFUSE.map(c=>`<div><b>${c[0]}</b><p>${c[1]}</p></div>`).join('')}</div></div>`;stage.querySelectorAll('#rchips .chip').forEach(b=>b.onclick=()=>{reviewLesson=+b.dataset.l;renderReview()})}
 function reviewCard(t){const info=INFO[t],arr=EXAMPLES.filter(e=>e.t===t&&(!reviewLesson||e.l===reviewLesson)),all=EXAMPLES.filter(e=>e.t===t);const dim=reviewLesson&&!arr.length;return `<div class="box card ${dim?'dim':''}"><span class="seal">${info.seal}</span><h3>${t}</h3><p class="lead">${info.def}</p>${exList(reviewLesson?arr:all)}</div>`}
 
 // game
-let soundOn=true,ctx=null,selectedLessons=[1,2,3,4,5,6],round=null;
+let soundOn=true,ctx=null,selectedLessons=ALL_LESSONS,round=null;
 function beep(good){if(!soundOn)return;try{ctx=ctx||new(window.AudioContext||window.webkitAudioContext)();const o=ctx.createOscillator(),g=ctx.createGain();o.frequency.value=good?720:220;g.gain.setValueAtTime(.001,ctx.currentTime);g.gain.exponentialRampToValueAtTime(.12,ctx.currentTime+.02);g.gain.exponentialRampToValueAtTime(.001,ctx.currentTime+.18);o.connect(g).connect(ctx.destination);o.start();o.stop(ctx.currentTime+.2)}catch(e){}}
 document.getElementById('soundBtn').onclick=()=>{soundOn=!soundOn;document.getElementById('soundBtn').textContent='音效：'+(soundOn?'開':'關')};
 function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
-function renderSetup(){const pool=PRACTICE.filter(p=>selectedLessons.includes(p.l));document.getElementById('gameStage').innerHTML=`<div class="box setup"><div><h2>選好範圍，開始闖關！</h2><p class="lead">題目直接取自六份「修辭輕鬆學」附件的練習題。</p></div><div><b>要複習哪幾課？</b><div class="chips" id="gchips">${[1,2,3,4,5,6].map(l=>`<button class="chip ${selectedLessons.includes(l)?'on':''}" data-l="${l}">第${'一二三四五六'[l-1]}課</button>`).join('')}<button class="chip" data-all="1">全選</button></div></div><button class="big" id="startGame" ${pool.length?'':'disabled'}>開始闖關（${Math.min(10,pool.length)} 題）</button></div>`;document.querySelectorAll('#gchips .chip').forEach(b=>b.onclick=()=>{if(b.dataset.all)selectedLessons=[1,2,3,4,5,6];else{const l=+b.dataset.l;selectedLessons=selectedLessons.includes(l)?selectedLessons.filter(x=>x!==l):[...selectedLessons,l].sort();if(!selectedLessons.length)selectedLessons=[l]}renderSetup()});document.getElementById('startGame').onclick=startGame}
+function renderSetup(){const pool=PRACTICE.filter(p=>selectedLessons.includes(p.l));document.getElementById('gameStage').innerHTML=`<div class="box setup"><div><h2>選好範圍，開始闖關！</h2><p class="lead">題目直接取自十二份「修辭輕鬆學」附件的練習題。</p></div><div><b>要複習哪幾課？</b><div class="chips" id="gchips">${ALL_LESSONS.map(l=>`<button class="chip ${selectedLessons.includes(l)?'on':''}" data-l="${l}">第${LESSON_NUM[l-1]}課</button>`).join('')}<button class="chip" data-all="1">全選</button></div></div><button class="big" id="startGame" ${pool.length?'':'disabled'}>開始闖關（${Math.min(10,pool.length)} 題）</button></div>`;document.querySelectorAll('#gchips .chip').forEach(b=>b.onclick=()=>{if(b.dataset.all)selectedLessons=ALL_LESSONS;else{const l=+b.dataset.l;selectedLessons=selectedLessons.includes(l)?selectedLessons.filter(x=>x!==l):[...selectedLessons,l].sort();if(!selectedLessons.length)selectedLessons=[l]}renderSetup()});document.getElementById('startGame').onclick=startGame}
 function startGame(){const pool=shuffle(PRACTICE.filter(p=>selectedLessons.includes(p.l))).slice(0,10);round={qs:pool,i:0,score:0,res:[]};renderQuestion()}
 function progress(){return `<div class="progress">${round.qs.map((_,i)=>{const r=round.res[i];return `<span class="sq ${i===round.i?'now':''}">${r===undefined?'':r?'○':'✕'}</span>`}).join('')}</div>`}
 function renderQuestion(){if(round.i>=round.qs.length)return renderResult();const q=round.qs[round.i],order=shuffle(q.opts.map((_,i)=>i));round.order=order;document.getElementById('gameStage').innerHTML=`<div class="box"><div class="hud">${progress()}<b>${round.i+1}/${round.qs.length}</b></div><div class="ex-src">${lessonName(q.l)}・${q.t}</div><p class="game-q">${q.q}</p><div class="gopts">${order.map((idx,k)=>`<button class="gopt" data-idx="${idx}">${esc(q.opts[idx])}</button>`).join('')}</div><div id="gfb"></div></div>`;document.querySelectorAll('.gopt').forEach(b=>b.onclick=()=>answerGame(+b.dataset.idx))}
@@ -232,11 +315,11 @@ function stepBar(l,step){const done=maxStepDone(l);return `<div class="stepbar">
 function renderCourseHome(){
  v2={lesson:0,step:0,ex:0,clue:0,quiz:0,quizCorrect:0,challenge:null};
  const stage=document.getElementById('learnStage');
- stage.innerHTML=`<div class="course-hero"><h2>🕵️ 翰林三上・修辭偵探學院</h2><p>選一課開始。每課固定走 5 個步驟：先學修辭，再看例句、找線索、選答案，最後完成闖關。</p></div><div class="lesson-grid">${[1,2,3,4,5,6].map(l=>{
+ stage.innerHTML=`<div class="course-hero"><h2>🕵️ 翰林三上・修辭偵探學院</h2><p>選一課開始。每課固定走 5 個步驟：先學修辭，再看例句、找線索、選答案，最後完成闖關。</p></div><div class="lesson-grid">${ALL_LESSONS.map(l=>{
    const done=maxStepDone(l),pct=done*20,types=allLessonTypes(l);
-   return `<button class="lesson-card" data-lesson="${l}"><div class="lesson-no">第${'一二三四五六'[l-1]}課</div><div class="lesson-name">${LESSONS[l]}</div><div class="lesson-types">${types.map(t=>`<span class="ltag">${t}</span>`).join('')}</div><div class="status">${done===5?'✅ 已完成本課':'學習進度 '+done+' / 5'}</div><div class="meter"><span style="width:${pct}%"></span></div></button>`}).join('')}</div><div class="resetline"><button id="resetV2">清除我的學習進度</button></div>`;
+   return `<button class="lesson-card" data-lesson="${l}"><div class="lesson-no">第${LESSON_NUM[l-1]}課</div><div class="lesson-name">${LESSONS[l]}</div><div class="lesson-types">${types.map(t=>`<span class="ltag">${t}</span>`).join('')}</div><div class="status">${done===5?'✅ 已完成本課':'學習進度 '+done+' / 5'}</div><div class="meter"><span style="width:${pct}%"></span></div></button>`}).join('')}</div><div class="resetline"><button id="resetV2">清除我的學習進度</button></div>`;
  stage.querySelectorAll('.lesson-card').forEach(b=>b.onclick=()=>openV2Lesson(+b.dataset.lesson,0));
- document.getElementById('resetV2').onclick=()=>{if(confirm('要清除六課的學習進度嗎？')){try{localStorage.removeItem(V2_KEY)}catch(e){}renderCourseHome()}};
+ document.getElementById('resetV2').onclick=()=>{if(confirm('要清除十二課的學習進度嗎？')){try{localStorage.removeItem(V2_KEY)}catch(e){}renderCourseHome()}};
 }
 function openV2Lesson(l,step=0){v2.lesson=l;v2.step=step;v2.ex=0;v2.clue=0;v2.quiz=0;v2.quizCorrect=0;v2.challenge=null;renderV2Step()}
 function renderV2Shell(inner){const l=v2.lesson,stage=document.getElementById('learnStage');stage.innerHTML=`<div class="student-box"><div class="guide-head"><div><div class="counter">${lessonName(l)}</div><h2>${LESSONS[l]}</h2></div><button class="secondary" id="v2home">← 回課程選單</button></div>${stepBar(l,v2.step)}<div id="v2content">${inner}</div></div>`;document.getElementById('v2home').onclick=renderCourseHome;stage.querySelectorAll('[data-v2step]').forEach(b=>b.onclick=()=>{v2.step=+b.dataset.v2step;v2.ex=0;v2.clue=0;v2.quiz=0;v2.quizCorrect=0;v2.challenge=null;renderV2Step()})}
@@ -250,7 +333,7 @@ function lessonPractice(l){return PRACTICE.filter(q=>q.l===l)}
 function renderV2Quiz(){const qs=lessonPractice(v2.lesson);if(!qs.length)return renderV2Shell(`<p>這一課附件沒有可呈現的選擇練習。</p><button class="big" id="skipQ">下一步</button>`),document.getElementById('skipQ').onclick=v2NextStep; if(v2.quiz>=qs.length){markStepDone(v2.lesson,4);return renderV2Shell(`<div class="finish-card"><div class="medal">⭐</div><h2>選答案完成！</h2><p>你完成了 ${qs.length} 題練習。接著進入本課最後一關。</p><button class="big" id="toChallenge">進入本課闖關 →</button></div>`),document.getElementById('toChallenge').onclick=()=>{v2.step=4;v2.challenge=null;renderV2Challenge()};}const q=qs[v2.quiz];renderV2Shell(`<div class="instruction"><div class="icon">✏️</div><div><b>一次一題：</b>先讀題目，再選答案。答錯時會給你提示，可以再試一次。</div></div><div class="counter">練習 ${v2.quiz+1} / ${qs.length} ・ ${q.t}</div><p class="game-q">${esc(q.q)}</p><button class="speak" id="speakQ">🔊 朗讀題目</button><div id="v2opts">${q.opts.map((o,i)=>`<button class="quiz-option" data-i="${i}">${i+1}. ${esc(o)}</button>`).join('')}</div><div id="v2fb" aria-live="polite"></div>`);document.getElementById('speakQ').onclick=()=>speakV2(q.q+'。'+q.opts.join('。'));document.querySelectorAll('#v2opts .quiz-option').forEach(b=>b.onclick=()=>answerV2Quiz(+b.dataset.i,q))}
 function answerV2Quiz(i,q){const b=document.querySelector(`#v2opts .quiz-option[data-i="${i}"]`),fb=document.getElementById('v2fb');if(i===q.a){document.querySelectorAll('#v2opts .quiz-option').forEach(x=>x.disabled=true);b.classList.add('correct');beep(true);v2.quizCorrect++;fb.innerHTML=`<div class="starburst">✨</div><div class="quiz-feedback good"><strong>答對了！</strong><br>${esc(q.ex)}</div><div class="navrow"><span></span><button class="big" id="nextQuiz">下一題 →</button></div>`;document.getElementById('nextQuiz').onclick=()=>{v2.quiz++;renderV2Quiz()}}else{b.classList.add('wrong');b.disabled=true;beep(false);fb.innerHTML=`<div class="quiz-feedback bad"><strong>再找一次線索</strong><br>${esc(INFO[q.t]?.tip||'回到句子中找關鍵字。')}</div>`}}
 function newChallenge(l){const qs=shuffle(lessonPractice(l));return {qs:qs.slice(0,Math.min(5,qs.length)),i:0,score:0,answered:false}}
-function renderV2Challenge(){if(!v2.challenge)v2.challenge=newChallenge(v2.lesson);const c=v2.challenge;if(!c.qs.length){markStepDone(v2.lesson,5);return renderV2Shell(`<div class="finish-card"><div class="medal">🏅</div><h2>本課完成！</h2><p>這一課附件沒有額外闖關題，因此直接完成本課。</p><button class="big" onclick="renderCourseHome()">回課程選單</button></div>`)}if(c.i>=c.qs.length){markStepDone(v2.lesson,5);const pct=Math.round(c.score/c.qs.length*100);return renderV2Shell(`<div class="finish-card"><div class="medal">${pct===100?'🏆':'🏅'}</div><h2>第${'一二三四五六'[v2.lesson-1]}課闖關完成！</h2><div class="score">${c.score}<small style="font-size:22px;color:var(--muted)"> / ${c.qs.length}</small></div><p>${pct===100?'全部答對！你已經抓到這一課的修辭線索。':'完成挑戰！錯的題目可以回到前面三個步驟再看一次。'}</p><button class="big" id="finishLesson">回課程選單</button></div>`),document.getElementById('finishLesson').onclick=renderCourseHome;}const q=c.qs[c.i],order=shuffle(q.opts.map((_,i)=>i));renderV2Shell(`<div class="instruction"><div class="icon">🚩</div><div><b>最後闖關：</b>這次不顯示提示，看看你能不能自己判斷。</div></div><div class="counter">闖關 ${c.i+1} / ${c.qs.length} ・ 已答對 ${c.score} 題</div><p class="game-q">${esc(q.q)}</p><div id="challengeOpts">${order.map(i=>`<button class="quiz-option" data-i="${i}">${esc(q.opts[i])}</button>`).join('')}</div><div id="challengeFb" aria-live="polite"></div>`);document.querySelectorAll('#challengeOpts .quiz-option').forEach(b=>b.onclick=()=>{const i=+b.dataset.i,ok=i===q.a;document.querySelectorAll('#challengeOpts .quiz-option').forEach(x=>{x.disabled=true;if(+x.dataset.i===q.a)x.classList.add('correct');if(+x.dataset.i===i&&!ok)x.classList.add('wrong')});if(ok)c.score++;beep(ok);document.getElementById('challengeFb').innerHTML=`<div class="quiz-feedback ${ok?'good':'bad'}"><strong>${ok?'答對！':'答案揭曉'}</strong><br>${esc(q.ex)}</div><div class="navrow"><span></span><button class="big" id="nextChallenge">${c.i===c.qs.length-1?'看結果':'下一題 →'}</button></div>`;document.getElementById('nextChallenge').onclick=()=>{c.i++;renderV2Challenge()}})}
+function renderV2Challenge(){if(!v2.challenge)v2.challenge=newChallenge(v2.lesson);const c=v2.challenge;if(!c.qs.length){markStepDone(v2.lesson,5);return renderV2Shell(`<div class="finish-card"><div class="medal">🏅</div><h2>本課完成！</h2><p>這一課附件沒有額外闖關題，因此直接完成本課。</p><button class="big" onclick="renderCourseHome()">回課程選單</button></div>`)}if(c.i>=c.qs.length){markStepDone(v2.lesson,5);const pct=Math.round(c.score/c.qs.length*100);return renderV2Shell(`<div class="finish-card"><div class="medal">${pct===100?'🏆':'🏅'}</div><h2>第${LESSON_NUM[v2.lesson-1]}課闖關完成！</h2><div class="score">${c.score}<small style="font-size:22px;color:var(--muted)"> / ${c.qs.length}</small></div><p>${pct===100?'全部答對！你已經抓到這一課的修辭線索。':'完成挑戰！錯的題目可以回到前面三個步驟再看一次。'}</p><button class="big" id="finishLesson">回課程選單</button></div>`),document.getElementById('finishLesson').onclick=renderCourseHome;}const q=c.qs[c.i],order=shuffle(q.opts.map((_,i)=>i));renderV2Shell(`<div class="instruction"><div class="icon">🚩</div><div><b>最後闖關：</b>這次不顯示提示，看看你能不能自己判斷。</div></div><div class="counter">闖關 ${c.i+1} / ${c.qs.length} ・ 已答對 ${c.score} 題</div><p class="game-q">${esc(q.q)}</p><div id="challengeOpts">${order.map(i=>`<button class="quiz-option" data-i="${i}">${esc(q.opts[i])}</button>`).join('')}</div><div id="challengeFb" aria-live="polite"></div>`);document.querySelectorAll('#challengeOpts .quiz-option').forEach(b=>b.onclick=()=>{const i=+b.dataset.i,ok=i===q.a;document.querySelectorAll('#challengeOpts .quiz-option').forEach(x=>{x.disabled=true;if(+x.dataset.i===q.a)x.classList.add('correct');if(+x.dataset.i===i&&!ok)x.classList.add('wrong')});if(ok)c.score++;beep(ok);document.getElementById('challengeFb').innerHTML=`<div class="quiz-feedback ${ok?'good':'bad'}"><strong>${ok?'答對！':'答案揭曉'}</strong><br>${esc(q.ex)}</div><div class="navrow"><span></span><button class="big" id="nextChallenge">${c.i===c.qs.length-1?'看結果':'下一題 →'}</button></div>`;document.getElementById('nextChallenge').onclick=()=>{c.i++;renderV2Challenge()}})}
 // 切回「課程學習」時固定回到課程選單，避免學生迷路。
 document.querySelector('.tab[data-tab="learn"]').addEventListener('click',()=>renderCourseHome());
 renderCourseHome();
